@@ -3,12 +3,16 @@
     | FULLSTACK TEAM | NODEJS / EXPRESS |
 ------------------------------------------------------- */
 const router = require("express").Router();
+const permissions = require("../middlewares/permissions");
+
 /* ------------------------------------------------------- */
 
 // routes/brand
 const brand = require("../controllers/brand");
 
 // URL: /brands
+
+router.use(permissions.isAdmin); // Apply admin permissions middleware
 
 router
   .route("/")
