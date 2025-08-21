@@ -87,20 +87,19 @@ module.exports = {
                 }
             }
         */
-        if(req.body?.quantity) {
-            // Mevcut satin alma adet bilsini al
-            const currentPurchase = await Purchase.findOne({ _id: req.params.id })  
 
+        if (req.body?.quantity) {
+            // Mevcut işlemdeki adet bilgisi al:
+            const currentPurchase = await Purchase.findOne({ _id: req.params.id })
+            // Farkı hesapla:
             const difference = req.body.quantity - currentPurchase.quantity
-            // Farki yansit
-            const updateProduct = await Product.updateOne({ _id: currentPurchase.productId }, {$inc: { quantity: +difference }})
-
+            // Farkı Producta yansıt:
+            const updateProduct = await Product.updateOne({ _id: currentPurchase.productId }, { $inc: { quantity: +difference } })
+            // productId değişmemeli:
+            req.body.productId = currentPurchase.productId
         }
-
-
+        // Update:
         const data = await Purchase.updateOne({ _id: req.params.id }, req.body, { runValidators: true })
-
-
 
         res.status(202).send({
             error: false,
