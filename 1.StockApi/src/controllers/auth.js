@@ -84,7 +84,7 @@ module.exports = {
             res.errorStatusCode = 401
             throw new Error("Username or email and password are required for login.");
         }
-
+    }
 
     },
 
@@ -103,10 +103,63 @@ module.exports = {
                 }
             }
         */
+           const refreshToken = req.body?.bearer?.refreshToken
 
+        if (refreshToken) {
 
+            jwt.verify(refreshToken, process.env.REFRESH_KEY, async function (err, userData) {
 
+                if (err) {
+
+                    res.errorStatusCode = 401
+                    throw err
+                } else {
+
+                    const { _id, password } = userData
+
+                    if (_id && password) {
+
+                        const user = await User.findOne({ _id })
+
+                        if (user && user.password == password) {
+
+                            if (user.isActive) {
+
+                                // JWT:
+                                const accessToken = jwt.sign(user.toJSON(), process.env.ACCESS_KEY, { expiresIn: '30m' })
+
+                                res.send({
+                                    error: false,
+                                    bearer: { accessToken }
+                                })
+
+                            } else {
+
+                                res.errorStatusCode = 401
+                                throw new Error('This account is not active.')
+                            }
+                        } else {
+
+                            res.errorStatusCode = 401
+                            throw new Error('Wrong id or password.')
+                        }
+                    } else {
+
+                        res.errorStatusCode = 401
+                        throw new Error('Please enter id and password.')
+                    }
+                }
+            })
+
+        } else {
+            res.errorStatusCode = 401
+            throw new Error('Please enter token.refresh')
+        }
     },
+
+
+
+    
 
     logout: async (req, res) => {
 
