@@ -162,15 +162,37 @@ module.exports = {
     
 
     logout: async (req, res) => {
-
         /*
             #swagger.tags = ["Authentication"]
             #swagger.summary = "Token: Logout"
             #swagger.description = 'Delete token-key.'
         */
 
+        const auth = req.headers?.authorization || null // Token ...tokenKey... // Bearer ...accessToken...
+        const tokenKey = auth ? auth.split(' ') : null // ['Token', '...tokenKey...'] // ['Bearer', '...accessToken...']
 
-    }
+        let message = null, result = {}
+
+        if (tokenKey) {
+
+            if (tokenKey[0] == 'Token') { // SimpleToken
+
+                result = await Token.deleteOne({ token: tokenKey[1] })
+                message = 'Token deleted. Logout was OK.'
+
+            } else { // JWT
+
+                message = 'No need any process for logout. You must delete JWT tokens.'
+            }
+        }
+
+        res.send({
+            error: false,
+            message,
+            result
+        })
+    },
+
 
 }
 
