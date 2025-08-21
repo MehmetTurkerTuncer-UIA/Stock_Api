@@ -7,7 +7,10 @@ const router = require('express').Router()
 // routes/product:
 
 const product = require('../controllers/product')
+const permissions = require("../middlewares/permissions");
 
+
+router.use(permissions.isStaff) // Ensure that only staff can access product routes
 // URL: /products
 
 router.route('/')

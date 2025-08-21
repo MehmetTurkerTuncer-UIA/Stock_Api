@@ -12,17 +12,15 @@ const sale = require('../controllers/sale')
 
 // URL: /sales
 
-router.use(permissions.isAdmin)
-
 router.route('/')
-    .get(sale.list)
-    .post(sale.create)
+    .get(permissions.isLogin, sale.list)
+    .post(permissions.isLogin, sale.create)
 
 router.route('/:id')
-    .get(sale.read)
-    .put(sale.update)
-    .patch(sale.update)
-    .delete(sale.delete)
+    .get(permissions.isLogin, sale.read)
+    .put(permissions.isStaff, sale.update)
+    .patch(permissions.isStaff, sale.update)
+    .delete(permissions.isStaff, sale.delete)
 
 /* ------------------------------------------------------- */
 // Exports:
