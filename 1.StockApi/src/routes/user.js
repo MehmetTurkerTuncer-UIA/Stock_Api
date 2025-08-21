@@ -7,20 +7,21 @@ const router = require("express").Router();
 
 // routes/user
 const user = require("../controllers/user");
+const permissions = require("../middlewares/permissions");
 
 // URL: /users
 
 router
   .route("/")
-  .get(user.list) // List Users
+  .get(permissions.isAdmin, user.list) // List Users
   .post(user.create); // Create User
 
 router
   .route("/:id")
-  .get(user.read) // Read User
-  .put(user.update) // Update User
-  .patch(user.update) // Update User
-  .delete(user.delete); // Delete User
+  .get(permissions.isLogin, user.read) // Read User
+  .put(permissions.isLogin, user.update) // Update User
+  .patch(permissions.isLogin, user.update) // Update User
+  .delete(permissions.isAdmin, user.delete); // Delete User
 
 
 //EXPORT

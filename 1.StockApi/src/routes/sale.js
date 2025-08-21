@@ -3,12 +3,16 @@
     | FULLSTACK TEAM | NODEJS / EXPRESS |
 ------------------------------------------------------- */
 const router = require('express').Router()
+const permissions = require("../middlewares/permissions");
+
 /* ------------------------------------------------------- */
 // routes/sale:
 
 const sale = require('../controllers/sale')
 
 // URL: /sales
+
+router.use(permissions.isAdmin)
 
 router.route('/')
     .get(sale.list)
