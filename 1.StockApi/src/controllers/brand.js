@@ -73,11 +73,8 @@ module.exports = {
                 in: 'body',
                 required: true,
                 schema: {
-                    "brandname": "test",
-                    "password": "1234",
-                    "email": "test@site.com",
-                    "firstName": "test",
-                    "lastName": "test",
+                  schema: {
+                  $ref: '#/definitions/Brand'
                 }
             }
         */
