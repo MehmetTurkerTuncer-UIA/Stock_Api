@@ -4,6 +4,9 @@
 ------------------------------------------------------- */
 
 const User = require("../models/user");
+const Token = require("../models/token");
+const jwt = require("jsonwebtoken");
+const passwordEncrypt = require("../helpers/passwordEncrypt");
 
 const checkUserEmailAndPassword = function(data){
 
@@ -71,10 +74,25 @@ module.exports = {
 
     const data = await User.create(checkUserEmailAndPassword(req.body));
 
+    /* AUTO LOGIN */ 
+    // Simple Token:
+    let tokenData = await Token.create({ 
+      userId: data._id,
+      token: passwordEncrypt(data._id + Date.now()) 
+      
+    });
+
+    // JWT Token:
+    const accessToken = jwt.sign(data.toJSON(), process.env.ACCESS_KEY, { expiresIn: '30m' });
+    const refreshToken = jwt.sign({ _id: data._id, password: data.password }, process.env.REFRESH_KEY, { expiresIn: '3d' });
+
+
 
     res.status(201).send({
       error: false,
       message: "User created successfully",
+      token: tokenData.token,
+      bearer: { accessToken, refreshToken },
       data,
     });
   },
