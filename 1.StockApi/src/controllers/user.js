@@ -76,27 +76,22 @@ module.exports = {
             #swagger.parameters['body'] = {
                 in: 'body',
                 required: true,
-                schema: {
-                    "username": "test",
-                    "password": "1234",
-                    "email": "test@site.com",
-                    "firstName": "test",
-                    "lastName": "test",
-                }
+                  schema: {
+                  $ref: '#/definitions/User'
+                }            
             }
         */
 
-    const data = await User.updateOne({_id: req.params.id} , req.body, {runValidators: true});
-    
+    const data = await User.updateOne({ _id: req.params.id }, req.body, {
+      runValidators: true,
+    });
+
     res.status(202).send({
       error: false,
       message: "User updated successfully",
       data,
       new: await User.findOne({ _id: req.params.id }),
     });
-
-
-
   },
 
   delete: async (req, res) => {
@@ -109,8 +104,8 @@ module.exports = {
 
     res.status(data.deleteCount ? 204 : 404).send({
       error: !data.deleteCount,
-      message: "User deleted : "+ data.deleteCount,
+      message: "User deleted : " + data.deleteCount,
       data,
     });
-  }
+  },
 };
