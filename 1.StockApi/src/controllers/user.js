@@ -102,6 +102,9 @@ module.exports = {
             #swagger.tags = ["Users"]
             #swagger.summary = "Get Single User"
         */
+    // Admin olmayan baskasinin bilgilerini goremez
+    req.params.id = req.user.isAdmin ? req.params.id : req.user._id;
+
     const data = await User.findOne({ _id: req.params.id });
     res.status(201).send({
       error: false,
@@ -130,6 +133,10 @@ module.exports = {
             }
         */
 
+    
+    // Admin olmayan baskasinin bilgilerini goremez
+    req.params.id = req.user.isAdmin ? req.params.id : req.user._id;
+            
     const data = await User.updateOne({ _id: req.params.id },checkUserEmailAndPassword(req.body) , {
       runValidators: true,
     });
