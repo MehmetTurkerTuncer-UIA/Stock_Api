@@ -115,9 +115,14 @@ module.exports = {
             #swagger.tags = ["Purchases"]
             #swagger.summary = "Delete Purchase"
         */
+        // Mevcut islemdeki adet bilgisini almak
+        const currentPurchase = await Purchase.findOne({ _id: req.params.id })  
 
+        // Delete the purchase
         const data = await Purchase.deleteOne({ _id: req.params.id })
     
+        const updateProduct = await Product.updateOne({ _id: currentPurchase.productId }, {$inc: { quantity: -currentPurchase.quantity }})  
+
         res.status(data.deletedCount ? 204 : 404).send({
             error: !data.deletedCount,
             data
