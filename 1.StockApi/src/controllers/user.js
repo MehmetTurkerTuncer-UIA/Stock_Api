@@ -9,7 +9,7 @@ const jwt = require("jsonwebtoken");
 const passwordEncrypt = require("../helpers/passwordEncrypt");
 
 const checkUserEmailAndPassword = function(data){
-
+  return data  // fonksiyonu pasif hale getirdim bunu kaldirirsan fonkisyon aktif olur
  // Email Control:
     const isEmailValidated = data.email ? /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data.email) : true
 
