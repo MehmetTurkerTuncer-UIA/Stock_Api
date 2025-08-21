@@ -18,8 +18,9 @@ const checkUserEmailAndPassword = function(data){
 
         if (isPasswordValidated) {
 
-            
+            data.password = passwordEncrypt(data.password);
 
+            return data;
           
         } else {
              throw new Error('Password is not validated.')
@@ -68,7 +69,8 @@ module.exports = {
             }
         */
 
-    const data = await User.create(req.body);
+    const data = await User.create(checkUserEmailAndPassword(req.body));
+
 
     res.status(201).send({
       error: false,
@@ -103,7 +105,7 @@ module.exports = {
             }
         */
 
-    const data = await User.updateOne({ _id: req.params.id }, req.body, {
+    const data = await User.updateOne({ _id: req.params.id },checkUserEmailAndPassword(req.body) , {
       runValidators: true,
     });
 
