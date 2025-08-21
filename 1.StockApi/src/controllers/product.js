@@ -22,8 +22,12 @@ module.exports = {
                 </ul>
             `
         */
-
-        const data = await res.getModelList(Product)
+        // POPULATE ISLEMI ICIN IKI FARKLI YONTEM 
+        //const data = await res.getModelList(Product, {}, ['categoryId', 'brandId'])
+        const data = await res.getModelList(Product, {}, [
+            {path: 'categoryId', select: 'name createdAt -_id'},  //neler gelsin _id gelmesin icin bu islem yapilabilir
+            {path: 'brandId', select: 'name'}
+        ])
 
         res.status(200).send({
             error: false,
@@ -60,7 +64,12 @@ module.exports = {
             #swagger.summary = "Get Single Product"
         */
 
-        const data = await Product.findOne({ _id: req.params.id })
+        const data = await Product.findOne({ _id: req.params.id }).populate[
+            {path: 'categoryId', select: 'name createdAt -_id'},  //neler gelsin _id gelmesin icin bu islem yapilabilir
+            {path: 'brandId', select: 'name'}
+        ]
+
+
 
         res.status(200).send({
             error: false,
