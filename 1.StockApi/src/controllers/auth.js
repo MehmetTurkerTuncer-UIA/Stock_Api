@@ -59,6 +59,8 @@ module.exports = {
                 res.status(200).send({
                     error: false,
                     message: "Login successful.",
+                    token: token.data,
+                    bearer:{accessToken, refreshToken},
                     user
 
                 })
