@@ -5,6 +5,31 @@
 
 const User = require("../models/user");
 
+const checkUserEmailAndPassword = function(data){
+
+ // Email Control:
+    const isEmailValidated = data.email ? /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data.email) : true
+
+    if (isEmailValidated) {
+
+        // console.log('Email is OK')
+
+        const isPasswordValidated = data.password ? /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(data.password) : true
+
+        if (isPasswordValidated) {
+
+            
+
+          
+        } else {
+             throw new Error('Password is not validated.')
+        
+          }
+    } else {
+         throw new Error('Email is not validated.')
+         }
+}
+
 module.exports = {
   list: async (req, res) => {
     /*
