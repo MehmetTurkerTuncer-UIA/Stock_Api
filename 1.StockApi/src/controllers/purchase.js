@@ -5,6 +5,7 @@
 // Purchase Controllers:
 
 const Purchase = require('../models/purchase')
+const Product = require('../models/product')
 
 module.exports = {
 
@@ -50,6 +51,9 @@ module.exports = {
 
         const data = await Purchase.create(req.body)
 
+        // Satin alma sonrası urun adetini arttır
+        const updateProduct = await Product.updateOne( { _id: data.productId }, {$inc: { quantity: +data.quantity }})
+
         res.status(201).send({
             error: false,
             data
@@ -83,8 +87,20 @@ module.exports = {
                 }
             }
         */
+        if(req.body?.quantity) {
+            // Mevcut satin alma adet bilsini al
+            const currentPurchase = await Purchase.findOne({ _id: req.params.id })  
+
+            const difference = req.body.quantity - currentPurchase.quantity
+            // Farki yansit
+            const updateProduct = await Product.updateOne({ _id: currentPurchase.productId }, {$inc: { quantity: +difference }})
+
+        }
+
 
         const data = await Purchase.updateOne({ _id: req.params.id }, req.body, { runValidators: true })
+
+
 
         res.status(202).send({
             error: false,
