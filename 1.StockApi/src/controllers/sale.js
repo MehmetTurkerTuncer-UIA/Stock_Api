@@ -45,6 +45,8 @@ module.exports = {
                 }
             }
         */
+        
+        req.body.userId = req.user._id // Set userId from authenticated user
 
         const data = await Sale.create(req.body)
 
