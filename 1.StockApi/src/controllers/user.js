@@ -96,6 +96,13 @@ module.exports = {
     /*
             #swagger.tags = ["Users"]
             #swagger.summary = "Update User"
+            #swagger.description = `
+                Password Format Type: It must has min.1 lowercase,
+                                                  min.1 uppercase, 
+                                                  min.1 number and 
+                                                  min.1 specialChars.
+            `
+
             #swagger.parameters['body'] = {
                 in: 'body',
                 required: true,
